@@ -1,0 +1,47 @@
+//domain
+
+class Reel
+	Integer symbol (init = 0);
+//var 
+//	symbol : [0, 2] init 0;  commentaire Tatiana: ce n'est pas la bonne syntaxe
+	// 0,1,2 and initial value 0 
+
+	event 
+		turn (delay = exponential(lambda)); 
+		// there is a given probability that the reel turns at timestep t. 
+		// The probability is constant and is always at 1-sqrt(1/3) 
+		// (P(turns) = 42.2649% ). 
+		// commentaire Tatiana: Il y a une probabilité p de changer d'état et une probabilité 1-p de rester dans l'état actuel? 
+ 
+	parameter Real lambda = 0.422649731;
+
+	transition
+		turn : true -> symbol := mod (symbol + 1, 3);
+ // 		turn : true -> symbol := ((symbol + 1) mod 3);
+		//post-condition: increment modulo 3
+
+ 	// assertion 	
+	
+	// In this case, there is no need for an assertion since
+	// the internal state of the Reel (R.symbol) is broadcast 
+	// and sufficient for the model.
+end
+
+
+block TwoReelsSystem
+
+// instances of Reel
+//component
+  Reel R1;
+  Reel R2;
+
+// Observer: true when both reels show same symbol
+// Boolean win (reset = false);
+
+//assertion
+//  win := (R1.symbol == R2.symbol);
+
+observer Boolean win = (R1.symbol == R2.symbol);
+
+
+end
